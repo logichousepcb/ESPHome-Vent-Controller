@@ -1,0 +1,98 @@
+ubstitutions:
+  name: logixvc
+  friendly_name: LogixVC2
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  min_version: 2024.6.0
+  name_add_mac_suffix: false
+  project:
+    name: esphome.web
+    version: dev
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+
+# Allow provisioning Wi-Fi via serial
+improv_serial:
+
+wifi:
+  # Set up a wifi access point
+  ap: {}
+
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device via WiFi AP.
+captive_portal:
+
+dashboard_import:
+  package_import_url: github://esphome/example-configs/esphome-web/esp8266.yaml@main
+  import_full_config: true
+
+# To have a "next url" for improv serial
+web_server:
+  port: 80
+
+
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: sh_direction_pin1
+    inverted: true
+  - platform: gpio
+    pin: GPIO5
+    id: sh_direction_pin2
+    inverted: true
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO13
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: Button
+    filters:
+      - delayed_off: 20ms
+    on_press:
+      - cover.open: lid 
+    on_double_click:
+      min_length: 50ms
+      max_length: 350ms
+      then:
+        - cover.close: lid 
+    
+ 
+cover:
+  - platform: template
+    name: "Vent"
+    id: lid
+    close_action:
+      - output.turn_on: sh_direction_pin2
+      - output.turn_off: sh_direction_pin1
+      - delay: 10s
+      - output.turn_off: sh_direction_pin2
+      - output.turn_off: sh_direction_pin1
+    
+    open_action:
+      - output.turn_off: sh_direction_pin2
+      - output.turn_on: sh_direction_pin1
+      - delay: 10s
+      - output.turn_off: sh_direction_pin2
+      - output.turn_off: sh_direction_pin1      
+    stop_action:
+      - output.turn_off: sh_direction_pin1
+      - output.turn_off: sh_direction_pin2
+    optimistic: true
+    
