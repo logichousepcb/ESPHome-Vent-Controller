@@ -57,7 +57,7 @@ output:
 binary_sensor:
   - platform: gpio
     pin:
-      number: GPIO13
+      number: GPIO12
       mode:
         input: true
         pullup: true
