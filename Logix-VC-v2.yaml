@@ -35,9 +35,7 @@ wifi:
 # to provision wifi credentials to the device via WiFi AP.
 captive_portal:
 
-dashboard_import:
-  package_import_url: github://esphome/example-configs/esphome-web/esp8266.yaml@main
-  import_full_config: true
+################################# ADD EVERYTHING BELOW TO YOUR ESPHOME CONFIG ###########################
 
 # To have a "next url" for improv serial
 web_server:
