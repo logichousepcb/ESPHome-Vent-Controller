@@ -93,4 +93,7 @@ cover:
       - output.turn_off: sh_direction_pin1
       - output.turn_off: sh_direction_pin2
     optimistic: true
+button:
+  - platform: factory_reset
+    name: Restart with Factory Default Settings
     
